@@ -1,0 +1,87 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+        queryDslVersion = "5.0.0"
+    }
+    repositories {
+        /*mavenCentral()*/
+        /*maven {
+            url "https://plugins.gradle.org/m2/"
+        }*/
+        maven {
+            url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        /*classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")*/
+        classpath(files('libs/querydsl-plugin-1.0.10.jar'))
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'com.ewerk.gradle.plugins.querydsl'
+
+group 'com.point'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    /*mavenCentral()*/
+    /*maven {
+        url "https://plugins.gradle.org/m2/"
+    }*/
+    maven {
+        url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+    }
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    implementation('org.projectlombok:lombok')
+    testImplementation('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+    testAnnotationProcessor('org.projectlombok:lombok')
+
+    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation('com.h2database:h2')
+
+    implementation("io.springfox:springfox-swagger-ui:2.9.2")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
+
+    implementation("com.querydsl:querydsl-jpa:${queryDslVersion}")
+    implementation("com.querydsl:querydsl-apt:${queryDslVersion}")
+    implementation("com.querydsl:querydsl-core:${queryDslVersion}")
+    implementation("com.querydsl:querydsl-sql:${queryDslVersion}")
+}
+
+// querydsl 사용할 경로 지정합니다. 현재 지정한 부분은 .gitignore에 포함되므로 git에 올라가지 않습니다.
+def querydslDir = "$buildDir/generated/'querydsl'"
+
+// JPA 사용여부 및 사용 경로 설정
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+// build시 사용할 sourceSet 추가 설정
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+// querydsl 컴파일 시 사용할 옵션 설정
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+// querydsl이 compileClassPath를 상속하도록 설정
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
