@@ -4,6 +4,7 @@ import com.point.domain.point.PointHistory;
 import com.point.web.dto.PointDto;
 import com.point.web.dto.PointHistoryDto;
 import com.point.web.handler.ApiResult;
+import com.point.web.handler.ResponseCode;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -75,5 +76,17 @@ public class PointService {
         });
 
         return new ApiResult<>(listPointHistoryDto);
+    }
+
+    public ApiResult accumulatePoint(Long memNo, int point) {
+        return new ApiResult<>(ResponseCode.COMM_S000);
+    }
+
+    public ApiResult usePoint(Long memNo, int point) {
+        return new ApiResult<>(ResponseCode.COMM_S000);
+    }
+
+    public ApiResult cancelPoint(Long memNo, Long pointId) {
+        return new ApiResult<>(ResponseCode.COMM_S000);
     }
 }
