@@ -38,6 +38,10 @@ public class Point extends BaseTimeEntity {
         this.expirationDate = expirationDate;
     }
 
+    public void setUsedPoint(int usedPoint) {
+        this.usedPoint = usedPoint;
+    }
+
     @Builder
     public Point(Long memNo, int availablePoint, int usedPoint, int cancelTp) {
         this.memNo = memNo;

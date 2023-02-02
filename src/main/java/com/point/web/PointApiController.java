@@ -27,7 +27,7 @@ public class PointApiController {
     public ApiResult getPoint(@RequestParam("memNo") String memNo) {
         // 파라미터 체크
         if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP)) {
-            return pointService.getPoint(Long.valueOf(memNo));
+            return new ApiResult<>(pointService.getPoint(Long.valueOf(memNo)));
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);
         }
