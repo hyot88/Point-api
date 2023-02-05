@@ -60,18 +60,21 @@ public class PointService {
         }
     }
 
+    @SuppressWarnings("all")
     public ApiResult getPointHistory(Long memNo, int page) {
         List<PointHistoryDto> listPointHistoryDto = new ArrayList<>();
-        List<PointHistory> listPointHistory = jpaQueryFactory.selectFrom(pointHistory)
+        List<Tuple> listTuple = jpaQueryFactory.select(pointHistory.registedDate, pointHistory.changePoint.sum())
+                .from(pointHistory)
                 .where(pointHistory.memNo.eq(memNo))
-                .orderBy(pointHistory.createdDate.desc())
+                .groupBy(pointHistory.registedDate)
+                .orderBy(pointHistory.registedDate.desc())
                 .fetch();
 
-        listPointHistory.forEach(history -> {
-            if (history != null) {
+        listTuple.forEach(tuple -> {
+            if (tuple != null) {
                 listPointHistoryDto.add(PointHistoryDto.builder()
-                        .createdDate(history.getCreatedDate())
-                        .changePoint(history.getChangePoint())
+                        .registedDate(tuple.get(pointHistory.registedDate))
+                        .changePoint(tuple.get(1, Integer.class))
                         .build());
             }
         });
@@ -93,6 +96,7 @@ public class PointService {
         pointHistoryRepository.save(PointHistory.builder()
                 .memNo(memNo)
                 .changePoint(availablePoint)
+                .registedDate(LocalDateTime.now())
                 .point(point)
                 .build());
 
@@ -102,6 +106,7 @@ public class PointService {
     @Transactional
     public ApiResult usePoint(Long memNo, int usePoint) {
         PointDto pointDto = getPoint(memNo);
+        LocalDateTime registedDate = LocalDateTime.now();
 
         if (pointDto.getTotalPoint() >= usePoint) {
             LocalDateTime localDateTime = LocalDateTime.now();
@@ -120,6 +125,7 @@ public class PointService {
                     pointHistoryRepository.save(PointHistory.builder()
                             .memNo(memNo)
                             .changePoint(-1 * usePoint)
+                            .registedDate(registedDate)
                             .point(point)
                             .build());
                     break;
@@ -130,6 +136,7 @@ public class PointService {
                     pointHistoryRepository.save(PointHistory.builder()
                             .memNo(memNo)
                             .changePoint(-1 * minusPoint)
+                            .registedDate(registedDate)
                             .point(point)
                             .build());
                 }

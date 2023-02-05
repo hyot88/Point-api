@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -24,14 +25,18 @@ public class PointHistory extends BaseTimeEntity {
     @Column(nullable = false)
     private int changePoint;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(nullable = false)
+    private LocalDateTime registedDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "point_id", nullable = false)
     private Point point;
 
     @Builder
-    public PointHistory(Long memNo, int changePoint, Point point) {
+    public PointHistory(Long memNo, int changePoint, LocalDateTime registedDate, Point point) {
         this.memNo = memNo;
         this.changePoint = changePoint;
+        this.registedDate = registedDate;
         this.point = point;
     }
 }

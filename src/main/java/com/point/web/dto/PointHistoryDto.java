@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PointHistoryDto {
 
-    private LocalDateTime createdDate;
+    private LocalDateTime registedDate;
     private int changePoint;
 }
