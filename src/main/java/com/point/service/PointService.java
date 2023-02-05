@@ -11,6 +11,7 @@ import com.point.web.handler.ResponseCode;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -62,12 +63,15 @@ public class PointService {
 
     @SuppressWarnings("all")
     public ApiResult getPointHistory(Long memNo, int page) {
+        PageRequest pageRequest = PageRequest.of(page - 1, 5);
         List<PointHistoryDto> listPointHistoryDto = new ArrayList<>();
         List<Tuple> listTuple = jpaQueryFactory.select(pointHistory.registedDate, pointHistory.changePoint.sum())
                 .from(pointHistory)
                 .where(pointHistory.memNo.eq(memNo))
                 .groupBy(pointHistory.registedDate)
                 .orderBy(pointHistory.registedDate.desc())
+                .offset(pageRequest.getOffset())
+                .limit(pageRequest.getPageSize())
                 .fetch();
 
         listTuple.forEach(tuple -> {
