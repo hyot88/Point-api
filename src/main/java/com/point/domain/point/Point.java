@@ -42,6 +42,10 @@ public class Point extends BaseTimeEntity {
         this.usedPoint = usedPoint;
     }
 
+    public void setCancel() {
+        this.cancelTp = 1;
+    }
+
     @Builder
     public Point(Long memNo, int availablePoint, int usedPoint, int cancelTp) {
         this.memNo = memNo;

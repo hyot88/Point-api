@@ -148,7 +148,20 @@ public class PointService {
         }
     }
 
+    @Transactional
     public ApiResult cancelPoint(Long memNo, Long pointId) {
+        Point point = pointRepository.findByMemNoAndPointId(memNo, pointId);
+
+        if (point.getUsedPoint() != 0) {
+            return new ApiResult<>(ResponseCode.POINT_E001);
+        }
+
+        if (point.getCancelTp() == 1) {
+            return new ApiResult<>(ResponseCode.POINT_E002);
+        }
+
+        point.setCancel();
+
         return new ApiResult<>(ResponseCode.COMM_S000);
     }
 }
