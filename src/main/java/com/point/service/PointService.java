@@ -188,6 +188,11 @@ public class PointService {
         // 포인트 정보 조회
         Point point = pointRepository.findByMemNoAndPointId(memNo, pointId);
 
+        // 포인트 정보가 없다면, 조회 안됨 리턴
+        if (point == null) {
+            return new ApiResult<>(ResponseCode.POINT_E003);
+        }
+
         // 사용된 포인트가 있다면, 취소 실패 리턴
         if (point.getUsedPoint() != 0) {
             return new ApiResult<>(ResponseCode.POINT_E001);

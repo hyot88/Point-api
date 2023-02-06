@@ -13,7 +13,8 @@ public enum ResponseCode {
     // 포인트
     POINT_E000(2000, "포인트가 부족합니다."),
     POINT_E001(2001, "포인트가 사용되어 취소할 수 없습니다."),
-    POINT_E002(2002, "이미 포인트가 취소되어있습니다.");
+    POINT_E002(2002, "이미 포인트가 취소되어있습니다."),
+    POINT_E003(2003, "포인트가 조회되지 않습니다.");
 
     private int code;
     private String message;
