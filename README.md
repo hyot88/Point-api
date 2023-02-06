@@ -34,4 +34,4 @@ http://[server-ip]:8088/swagger-ui.html
 
 ### 8. H2 Console 접속 방법
 http://[server-ip]:8088/h2-console  
-![접속 정보](img.png)
+![접속 정보](image/img.png)
