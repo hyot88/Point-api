@@ -82,18 +82,29 @@ public class PointService {
                 .limit(pageRequest.getPageSize())
                 .fetch();
 
-        // 리턴값 List<PointHistoryDto> 생성
-        List<PointHistoryDto> listPointHistoryDto = new ArrayList<>();
+        // 레코드 총 개수
+        long count = jpaQueryFactory.select(pointHistory.registedDate, pointHistory.changePoint.sum())
+                .from(pointHistory)
+                .where(pointHistory.memNo.eq(memNo))
+                .groupBy(pointHistory.registedDate)
+                .stream().count();
+
+        // 리턴값 PointHistoryDto 생성
+        List<PointHistoryDto.PointHistoryDetail> list = new ArrayList<>();
+        PointHistoryDto pointHistoryDto = PointHistoryDto.builder()
+                .totalPage((int) Math.ceil(count / 5.0))
+                .list(list)
+                .build();
+
         listTuple.forEach(tuple -> {
             if (tuple != null) {
-                listPointHistoryDto.add(PointHistoryDto.builder()
-                        .registedDate(tuple.get(pointHistory.registedDate))
+                list.add(PointHistoryDto.PointHistoryDetail.builder().registedDate(tuple.get(pointHistory.registedDate))
                         .changePoint(tuple.get(1, Integer.class))
                         .build());
             }
         });
 
-        return new ApiResult<>(listPointHistoryDto);
+        return new ApiResult<>(pointHistoryDto);
     }
 
     // 회원별 포인트 적립
