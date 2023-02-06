@@ -17,39 +17,42 @@ public class Point extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long pointId;
+    private Long pointId;       // 포인트 ID
 
     @Column(nullable = false)
-    private Long memNo;
+    private Long memNo;         // 회원 번호
 
     @Column(nullable = false)
-    private int availablePoint;
+    private int earnedPoint;    // 적립 포인트
 
     @Column(nullable = false)
-    private int usedPoint;
+    private int usedPoint;      // 사용된 포인트
 
     @Column(nullable = false)
-    private int cancelTp;
+    private int cancelTp;       // 취소 여부 상태값 (0: 정상, 1: 취소)
 
     @Column
-    private LocalDateTime expirationDate;
+    private LocalDateTime expirationDate;   // 포인트 만료 일자
 
+    // 포인트 만료 일자 세팅
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
+    // 사용된 포인트 세팅
     public void setUsedPoint(int usedPoint) {
         this.usedPoint = usedPoint;
     }
 
+    // 취소 처리
     public void setCancel() {
         this.cancelTp = 1;
     }
 
     @Builder
-    public Point(Long memNo, int availablePoint, int usedPoint, int cancelTp) {
+    public Point(Long memNo, int earnedPoint, int usedPoint, int cancelTp) {
         this.memNo = memNo;
-        this.availablePoint = availablePoint;
+        this.earnedPoint = earnedPoint;
         this.usedPoint = usedPoint;
         this.cancelTp = cancelTp;
     }

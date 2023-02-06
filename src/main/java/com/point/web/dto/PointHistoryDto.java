@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class PointHistoryDto {
 
-    private LocalDateTime registedDate;
-    private int changePoint;
+    private LocalDateTime registedDate;     // 등록 날짜
+    private int changePoint;                // 변경된 포인트
 }

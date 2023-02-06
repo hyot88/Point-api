@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PointDto {
 
-    private Long memNo;
-    private int totalPoint;
+    private Long memNo;     // 회원 번호
+    private int totalPoint; // 회원의 총 포인트
 }
