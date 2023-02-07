@@ -7,13 +7,9 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        /*maven {
-            url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
-        }*/
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        /*classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")*/
         classpath(files('libs/querydsl-plugin-1.0.10.jar'))
     }
 }
@@ -31,9 +27,6 @@ repositories {
     maven {
         url "https://plugins.gradle.org/m2/"
     }
-    /*maven {
-        url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
-    }*/
 }
 
 dependencies {
