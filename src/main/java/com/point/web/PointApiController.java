@@ -26,7 +26,7 @@ public class PointApiController {
     })
     public ApiResult getPoint(@PathVariable String memNo) {
         // 파라미터 체크
-        if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP)) {
+        if (memNo != null && !"".equals(memNo.trim()) && memNo.matches(NUM_REGEXP)) {
             return new ApiResult<>(pointService.getPoint(Long.valueOf(memNo)));
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);
@@ -41,7 +41,7 @@ public class PointApiController {
     })
     public ApiResult getPointHistory(@PathVariable String memNo, @PathVariable int page) {
         // 파라미터 체크
-        if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP) && page > 0) {
+        if (memNo != null && !"".equals(memNo.trim()) && memNo.matches(NUM_REGEXP) && page > 0) {
             return pointService.getPointHistory(Long.valueOf(memNo), page);
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);
@@ -56,7 +56,7 @@ public class PointApiController {
     })
     public ApiResult accumulatePoint(@PathVariable String memNo, @PathVariable int point) {
         // 파라미터 체크
-        if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP) && point > 0) {
+        if (memNo != null && !"".equals(memNo.trim()) && memNo.matches(NUM_REGEXP) && point > 0) {
             return pointService.accumulatePoint(Long.valueOf(memNo), point);
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);
@@ -71,7 +71,7 @@ public class PointApiController {
     })
     public ApiResult usePoint(@PathVariable String memNo, @PathVariable int point) {
         // 파라미터 체크
-        if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP) && point > 0) {
+        if (memNo != null && !"".equals(memNo.trim()) && memNo.matches(NUM_REGEXP) && point > 0) {
             return pointService.usePoint(Long.valueOf(memNo), point);
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);
@@ -84,9 +84,9 @@ public class PointApiController {
             @ApiImplicitParam(name = "memNo", value = "회원번호", required = true, dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "pointId", value = "포인트 테이블 ID", required = true, dataType = "long", paramType = "path", example = "0")
     })
-    public ApiResult cancelPoint(@PathVariable String memNo, @PathVariable Long pointId) {
+    public ApiResult cancelPoint(@PathVariable String memNo, @PathVariable long pointId) {
         // 파라미터 체크
-        if (memNo != null && !"".equals(memNo) && memNo.matches(NUM_REGEXP) && pointId > 0) {
+        if (memNo != null && !"".equals(memNo.trim()) && memNo.matches(NUM_REGEXP) && pointId > 0) {
             return pointService.cancelPoint(Long.valueOf(memNo), pointId);
         } else {
             return new ApiResult<>(ResponseCode.COMM_E001);

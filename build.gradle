@@ -4,12 +4,12 @@ buildscript {
         queryDslVersion = "5.0.0"
     }
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
         /*maven {
-            url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+            url "https://plugins.gradle.org/m2/"
         }*/
+        maven {
+            url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -28,17 +28,19 @@ group 'com.point'
 version '1.0.0-SNAPSHOT'
 
 repositories {
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
     /*maven {
-        url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+        url "https://plugins.gradle.org/m2/"
     }*/
+    maven {
+        url "https://lab-dev-nexus.inpark.kr/repository/maven-central"
+    }
 }
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.junit.jupiter:junit-jupiter:5.8.1')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation('org.mockito:mockito-inline')
 
     implementation('org.projectlombok:lombok')
     testImplementation('org.projectlombok:lombok')

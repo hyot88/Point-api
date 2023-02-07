@@ -50,10 +50,11 @@ public class Point extends BaseTimeEntity {
     }
 
     @Builder
-    public Point(Long memNo, int earnedPoint, int usedPoint, int cancelTp) {
+    public Point(Long memNo, int earnedPoint, int usedPoint, int cancelTp, LocalDateTime expirationDate) {
         this.memNo = memNo;
         this.earnedPoint = earnedPoint;
         this.usedPoint = usedPoint;
         this.cancelTp = cancelTp;
+        this.expirationDate = expirationDate;
     }
 }
