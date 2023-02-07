@@ -14,12 +14,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * 회원별 포인트 적립 API 테스트 클래스
@@ -92,8 +91,8 @@ public class PointApiControllerAccumulatePointTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code", is(ResponseCode.COMM_S000.getCode())));
 
-        // 적립한 포인트 정보 확인
-        Point point = pointRepository.findByMemNoAndPointId(memNo, 1L);
+        // 최근 적립한 포인트 정보 확인
+        Point point = pointRepository.findFirstByMemNoOrderByPointIdDesc(memNo);
         assertThat(point.getMemNo()).isEqualTo(memNo);
         assertThat(point.getEarnedPoint()).isEqualTo(amount);
         assertThat(point.getUsedPoint()).isEqualTo(0);
@@ -105,6 +104,6 @@ public class PointApiControllerAccumulatePointTest {
         PointHistory pointHistory = pointHistoryRepository.findFirstByMemNoAndPointOrderByPointHisIdDesc(memNo, point);
         assertThat(pointHistory.getMemNo()).isEqualTo(memNo);
         assertThat(pointHistory.getChangePoint()).isEqualTo(amount);
-        assertThat(pointHistory.getPoint().getPointId()).isEqualTo(1L);
+        assertThat(pointHistory.getPoint().getPointId()).isEqualTo(point.getPointId());
     }
 }

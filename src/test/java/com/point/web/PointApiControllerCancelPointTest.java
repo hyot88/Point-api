@@ -1,7 +1,7 @@
 package com.point.web;
 
 import com.point.domain.point.Point;
-import com.point.domain.point.PointHistory;
+import com.point.domain.point.PointRepository;
 import com.point.web.handler.ResponseCode;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +28,9 @@ public class PointApiControllerCancelPointTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Autowired
+    private PointRepository pointRepository;
 
     @Test
     @Transactional
@@ -71,6 +73,40 @@ public class PointApiControllerCancelPointTest {
     @Test
     @Transactional
     public void point_포인트_취소() throws Exception {
+        Long memNo = 1234L;
 
+        // 없는 ID로 포인트 취소
+        mvc.perform(delete("/point/" + memNo + "/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code", is(ResponseCode.POINT_E003.getCode())));
+
+        // 포인트 적립
+        mvc.perform(post("/point/" + memNo + "/" + 2000));
+
+        // 포인트 일부 사용
+        mvc.perform(put("/point/" + memNo + "/" + 500));
+
+        // 최근 적립한 포인트 정보 조회
+        Point point = pointRepository.findFirstByMemNoOrderByPointIdDesc(memNo);
+
+        // 일부 사용한 포인트를 취소
+        mvc.perform(delete("/point/" + memNo + "/" + point.getPointId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code", is(ResponseCode.POINT_E001.getCode())));
+
+        // 포인트 적립
+        mvc.perform(post("/point/" + memNo + "/" + 2000));
+
+        // 최근 적립한 포인트 정보 조회
+        point = pointRepository.findFirstByMemNoOrderByPointIdDesc(memNo);
+
+        // 사용안한 포인트를 취소
+        mvc.perform(delete("/point/" + memNo + "/" + point.getPointId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code", is(ResponseCode.COMM_S000.getCode())));
+
+        // 취소한 포인트 정보 조회
+        point = pointRepository.findFirstByMemNoOrderByPointIdDesc(memNo);
+        assertThat(point.getCancelTp()).isEqualTo(1);
     }
 }
